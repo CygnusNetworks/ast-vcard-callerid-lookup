@@ -43,6 +43,7 @@ Requires:       python-setuptools, python-configobj, python-pyst, python-phonenu
 
 %install
 %py2_install
+mkdir -p $RPM_BUILD_ROOT%{_unitdir}
 install -p -m 644 ./astvcardcallerid.service $RPM_BUILD_ROOT%{_unitdir}/astvcardcallerid.service
 
 %post
