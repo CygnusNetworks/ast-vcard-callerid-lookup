@@ -14,7 +14,7 @@ add_org = boolean(default=True)
 """
 
 
-class ASTVCardCallerIDConfig(object):
+class ASTVCardCallerIDConfig(object):  # pylint:disable=too-few-public-methods
 	def __init__(self, configfile="/etc/astvcardcallerid.conf"):
 		config_spec_parsed = configobj.ConfigObj(CONFIG_SPEC_SOURCE.format().splitlines(), list_values=False)
 
