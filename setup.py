@@ -11,5 +11,6 @@ setup (
 	author_email='debian@cygnusnetworks.de',
 	license='Apache License 2.0',
 	entry_points={'console_scripts': ['ast-vcard-callerid = astvcardcallerid.fastagi:main']},
+	packages=['astvcardcallerid'],
 	install_requires=["configobj", "vobject", "phonenumbers"],
 )
