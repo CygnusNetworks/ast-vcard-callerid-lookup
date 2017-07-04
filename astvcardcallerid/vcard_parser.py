@@ -7,10 +7,11 @@ import vobject
 def read_cards(directory):
 	cards = []
 	files = os.listdir(directory)
+	files.sort()
 	for file in files:
-		if os.path.isfile(file) and file.endswith(".vcf"):
-			with open(file, 'r') as f:
-				print("Parsing vcard file %s" % file)
+		if os.path.isfile(os.path.join(directory, file)) and file.endswith(".vcf"):
+			with open(os.path.join(directory, file), 'r') as f:
+				# print("Parsing vcard file %s" % file)
 				data = f.readlines()
 
 			for line in data:
