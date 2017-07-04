@@ -1,0 +1,12 @@
+[Unit]
+Description=Asterisk VCard CallerID FastAGI Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/astvcardcallerid
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

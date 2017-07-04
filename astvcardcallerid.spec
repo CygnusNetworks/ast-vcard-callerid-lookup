@@ -21,6 +21,10 @@ Source0:        python-%{srcname}-%{version}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python2-devel, python-setuptools
+
+%{?systemd_requires}
+BuildRequires: systemd
+
 %if 0%{?with_check}
 BuildRequires:  pytest
 %endif # with_check
@@ -37,14 +41,24 @@ Requires:       python-setuptools, python-configobj, python-pyst, python-phonenu
 %build
 %py2_build
 
-
 %install
 %py2_install
+install -p -m 644 ./astvcardcallerid.service $RPM_BUILD_ROOT%{_unitdir}/astvcardcallerid.service
+
+%post
+%systemd_post astvcardcallerid.service
+
+%preun
+%systemd_preun astvcardcallerid.service
+
+%postun
+%systemd_postun_with_restart astvcardcallerid.service
 
 %files
 %dir %{python2_sitelib}/%{srcname}
 
 %{_bindir}/astvcardcallerid
+%{_unitdir}/astvcardcallerid.service
 %{python2_sitelib}/%{srcname}/*.*
 %{python2_sitelib}/%{srcname}-%{version}-py2.*.egg-info
 
