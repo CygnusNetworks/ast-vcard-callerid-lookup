@@ -65,7 +65,11 @@ def main():
 	print("Start parsing contacts")
 	cards = vcard_parser.read_cards(c["general"]["vcard_dir"])
 	server.contact_data = vcard_parser.parse_cards(cards)
-	print("Finished parsing contact data - Found %i distinct numbers" % len(server.contact_data.keys()))
+	num_numbers = len(server.contact_data.keys())
+	if num_numbers == 0:
+		print("No numbers found. Not serving any callerids")
+		sys.exit(0)
+	print("Finished parsing contact data - Found %i distinct numbers" % num_numbers)
 	server.config = c
 	try:
 		print("Server FastAGI on %s:%s" % (c["general"]["ip"],c["general"]["port"]))
