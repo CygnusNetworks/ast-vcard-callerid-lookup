@@ -36,8 +36,10 @@ def parse_cards(cards, origin="DE"):
 				fn = card.fn.value
 				if hasattr(card, "org"):
 					org = card.org.value[0]
+				# strip all GSM phone number specials like dial *31# or #31#
 				num_pre = re.sub(r'^(\*|\#).*\#', '', tel.value)
-				num_pre = re.sub(r'\s', '', num_pre)
+				# Remove everything non digit or +
+				num_pre = re.sub(r'[^0-9+]', '', num_pre)
 				try:
 					if num_pre.startswith("+"):
 						num = phonenumbers.parse(num_pre.decode('utf-8'))
