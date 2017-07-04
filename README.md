@@ -59,6 +59,7 @@ The FastAGI script is intended to be started as a SystemD (simple) service. A se
 
 ```
 sudo cp astvcardcallerid.service /etc/systemd/system
+sudo systemctl daemon-reload
 sudo systemctl enable astvcardcallerid
 sudo systemctl start astvcardcallerid
 ```
