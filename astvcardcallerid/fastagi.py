@@ -60,7 +60,7 @@ def main():
 	conf = config.ASTVCardCallerIDConfig()
 	c = conf.get_configobj()
 	SocketServer.TCPServer.allow_reuse_address = True
-	server = SocketServer.TCPServer((c["general"]["ip"],c["general"]["port"]), ASTVCardCallerID)
+	server = SocketServer.TCPServer((c["general"]["ip"], c["general"]["port"]), ASTVCardCallerID)
 	print("astvcardcallerid starting")
 	print("Start parsing contacts")
 	cards = vcard_parser.read_cards(c["general"]["vcard_dir"])
@@ -72,7 +72,7 @@ def main():
 	print("Finished parsing contact data - Found %i distinct numbers" % num_numbers)
 	server.config = c
 	try:
-		print("Server FastAGI on %s:%s" % (c["general"]["ip"],c["general"]["port"]))
+		print("Server FastAGI on %s:%s" % (c["general"]["ip"], c["general"]["port"]))
 		server.serve_forever()
 	except KeyboardInterrupt as e:
 		print("Shutdown on ctrl-c")
