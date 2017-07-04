@@ -4,16 +4,16 @@ import phonenumbers
 import re
 import vobject
 
+
 def read_cards(directory):
 	cards = []
 	files = os.listdir(directory)
 	files.sort()
-	for file in files:
-		if os.path.isfile(os.path.join(directory, file)) and file.endswith(".vcf"):
-			with open(os.path.join(directory, file), 'r') as f:
-				# print("Parsing vcard file %s" % file)
+	for filename in files:
+		if os.path.isfile(os.path.join(directory, filename)) and filename.endswith(".vcf"):
+			with open(os.path.join(directory, filename), 'r') as f:
+				# print("Parsing vcard filename %s" % filename)
 				data = f.readlines()
-
 			for line in data:
 				if re.match(r"^BEGIN:VCARD", line):
 					newcard = line
@@ -23,6 +23,7 @@ def read_cards(directory):
 				else:
 					newcard += line
 	return cards
+
 
 def parse_cards(cards, origin="DE"):
 	numbers = dict()
@@ -56,4 +57,3 @@ def parse_cards(cards, origin="DE"):
 						numbers[e164]["org"] = org
 
 	return numbers
-
