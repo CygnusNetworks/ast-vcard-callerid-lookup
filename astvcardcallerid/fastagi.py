@@ -44,7 +44,7 @@ class ASTVCardCallerID(SocketServer.StreamRequestHandler, SocketServer.Threading
 			else:
 				for number in numbers:
 					if number.endswith("0") and "org" in self.server.contact_data[number]:
-						if e164[:len(number)-2] == number[:-1]:
+						if e164[:len(number) - 2] == number[:-1]:
 							text = self.make_text(self.server.contact_data[number])
 							break
 				print("FastAGI request for client %s:%s for E164 number %s results in Organiztion Caller ID %s" % (self.client_address[0], self.client_address[1], e164, text))
@@ -55,6 +55,7 @@ class ASTVCardCallerID(SocketServer.StreamRequestHandler, SocketServer.Threading
 			print(e)
 		finally:
 			devnull.close()
+
 
 def main():
 	conf = config.ASTVCardCallerIDConfig()
