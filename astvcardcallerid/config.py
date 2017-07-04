@@ -8,14 +8,14 @@ CONFIG_SPEC_SOURCE = """
 ip = string(default="127.0.0.1")
 port = integer(min=1024,max=65535,default=4573)
 origin = string(min=2,max=2,default="DE")
-vcard_dir = string(default="/usr/share/ast-vcard-callerid")
+vcard_dir = string(default="/usr/share/astvcardcallerid")
 add_type = boolean(default=True)
 add_org = boolean(default=True)
 """
 
 
 class ASTVCardCallerIDConfig(object):
-	def __init__(self, configfile="/etc/ast-vcard-callerid.conf"):
+	def __init__(self, configfile="/etc/astvcardcallerid.conf"):
 		config_spec_parsed = configobj.ConfigObj(CONFIG_SPEC_SOURCE.format().splitlines(), list_values=False)
 
 		self.config = configobj.ConfigObj(configfile, file_error=True, configspec=config_spec_parsed)

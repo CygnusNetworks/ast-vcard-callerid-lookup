@@ -7,7 +7,7 @@
 %global with_python3 1
 %endif
 
-%define srcname ast-vcard-callerid
+%define srcname astvcardcallerid
 %define version 0.10
 %define release 1
 %define sum Cygnus Networks GmbH %{srcname} package
@@ -44,7 +44,7 @@ Requires:       python-setuptools, python-configobj, python-pyst, python-phonenu
 %files
 %dir %{python2_sitelib}/%{srcname}
 
-%{_bindir}/ast-vcard-callerid
+%{_bindir}/astvcardcallerid
 %{python2_sitelib}/%{srcname}/*.*
 %{python2_sitelib}/%{srcname}-%{version}-py2.*.egg-info
 

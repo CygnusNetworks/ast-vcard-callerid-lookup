@@ -61,7 +61,7 @@ def main():
 	c = conf.get_configobj()
 	SocketServer.TCPServer.allow_reuse_address = True
 	server = SocketServer.TCPServer((c["general"]["ip"],c["general"]["port"]), ASTVCardCallerID)
-	print("ast-vcard-callerid starting")
+	print("astvcardcallerid starting")
 	print("Start parsing contacts")
 	cards = vcard_parser.read_cards(c["general"]["vcard_dir"])
 	server.contact_data = vcard_parser.parse_cards(cards)
