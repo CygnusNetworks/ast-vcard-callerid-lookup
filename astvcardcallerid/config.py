@@ -18,7 +18,7 @@ class ASTVCardCallerIDConfig(object):
 	def __init__(self, configfile="/etc/astvcardcallerid.conf"):
 		config_spec_parsed = configobj.ConfigObj(CONFIG_SPEC_SOURCE.format().splitlines(), list_values=False)
 
-		self.config = configobj.ConfigObj(configfile, file_error=True, configspec=config_spec_parsed)
+		self.config = configobj.ConfigObj(configfile, file_error=False, configspec=config_spec_parsed)
 		validator = validate.Validator()
 		res = self.config.validate(validator, preserve_errors=True)
 		for section_list, key, error in configobj.flatten_errors(self.config, res):  # pylint: disable=W0612
