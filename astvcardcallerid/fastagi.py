@@ -92,8 +92,8 @@ def main():
 
 	SocketServer.TCPServer.allow_reuse_address = True
 	server = SocketServer.TCPServer((ip, port), ASTVCardCallerID)
-	log.info("astvcardcallerid version %s starting" % __version__)
-	log.debug("Start parsing contacts from dir %s" % vcard_dir)
+	log.info("astvcardcallerid version %s starting", __version__)
+	log.debug("Start parsing contacts from dir %s", vcard_dir)
 	cards = vcard_parser.read_cards(vcard_dir)
 	server.contact_data = vcard_parser.parse_cards(cards)
 	num_numbers = len(server.contact_data.keys())
