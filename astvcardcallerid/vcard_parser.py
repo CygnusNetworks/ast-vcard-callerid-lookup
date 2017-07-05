@@ -8,6 +8,7 @@ import vobject
 
 log = logging.getLogger("astvcardcallerid.vcard_parser")
 
+
 def read_cards(directory):
 	cards = []
 	files = os.listdir(directory)
