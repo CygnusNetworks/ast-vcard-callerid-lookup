@@ -15,7 +15,7 @@ def read_cards(directory):
 	for filename in files:
 		if os.path.isfile(os.path.join(directory, filename)) and filename.endswith(".vcf"):
 			with open(os.path.join(directory, filename), 'r') as f:
-				log.debug("Parsing vcard filename %s" % filename)
+				log.debug("Parsing vcard filename %s", filename)
 				data = f.readlines()
 			for line in data:
 				if re.match(r"^BEGIN:VCARD", line):
