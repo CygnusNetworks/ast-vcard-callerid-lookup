@@ -19,6 +19,7 @@ log.setLevel(logging.DEBUG)
 ch = logging.StreamHandler()
 log.addHandler(ch)
 
+
 class ASTVCardCallerID(SocketServer.StreamRequestHandler, SocketServer.ThreadingMixIn, object):
 	def make_text(self, contact):
 		text = ""
