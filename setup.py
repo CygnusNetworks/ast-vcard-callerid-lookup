@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from setuptools import setup, find_packages
+from setuptools import setup
 
-setup (
+import astvcardcallerid
+
+setup(
 	name='astvcardcallerid',
-	version="0.10",
+	version=astvcardcallerid.__version__,
 	description="Asterisk VCard Caller ID Lookup",
 	author='Dr. Torge Szczepanek',
 	author_email='debian@cygnusnetworks.de',

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
 
+import argparse
 import SocketServer
 import os
 import sys
@@ -10,6 +11,7 @@ import phonenumbers
 
 from . import config
 from . import vcard_parser
+from . import __version__
 
 
 class ASTVCardCallerID(SocketServer.StreamRequestHandler, SocketServer.ThreadingMixIn, object):
@@ -58,13 +60,36 @@ class ASTVCardCallerID(SocketServer.StreamRequestHandler, SocketServer.Threading
 
 
 def main():
+	argp = argparse.ArgumentParser()
+	argp.add_argument("-d", "--directory", help="Set directory for vcards", default=None)
+	argp.add_argument("-i", "--ip", help="Set bind ip for FastAGI", default=None)
+	argp.add_argument("-p", "--port", help="Set bind port for FastAGI", type=int, default=None)
+
+	args = argp.parse_args()  # pylint: disable=W0612
+
 	conf = config.ASTVCardCallerIDConfig()
 	c = conf.get_configobj()
+
+	if args.directory is not None:
+		vcard_dir = args.directory
+	else:
+		vcard_dir = c["general"]["vcard_dir"]
+
+	if args.ip is not None:
+		ip = args.ip
+	else:
+		ip = c["general"]["ip"]
+
+	if args.port is not None:
+		port = args.port
+	else:
+		port = c["general"]["port"]
+
 	SocketServer.TCPServer.allow_reuse_address = True
-	server = SocketServer.TCPServer((c["general"]["ip"], c["general"]["port"]), ASTVCardCallerID)
-	print("astvcardcallerid starting")
-	print("Start parsing contacts from dir %s" % c["general"]["vcard_dir"])
-	cards = vcard_parser.read_cards(c["general"]["vcard_dir"])
+	server = SocketServer.TCPServer((ip, port), ASTVCardCallerID)
+	print("astvcardcallerid version %s starting" % __version__)
+	print("Start parsing contacts from dir %s" % vcard_dir)
+	cards = vcard_parser.read_cards(vcard_dir)
 	server.contact_data = vcard_parser.parse_cards(cards)
 	num_numbers = len(server.contact_data.keys())
 	if num_numbers == 0:
@@ -73,7 +98,7 @@ def main():
 	print("Finished parsing contact data - Found %i distinct numbers" % num_numbers)
 	server.config = c
 	try:
-		print("Server FastAGI on %s:%s" % (c["general"]["ip"], c["general"]["port"]))
+		print("Server FastAGI on %s:%s" % (ip, port))
 		server.serve_forever()
 	except KeyboardInterrupt as e:
 		print("Shutdown on ctrl-c")
