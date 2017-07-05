@@ -5,7 +5,11 @@ This small Asterisk FastAGI script written in Python provides a caller ID lookup
 Phone numbers are matched, validated and normalized agains the Google Phonenumber Library. If no match is found, shorter phonenumbers ending with 0 are matched for Company/Organization records.
 Lets say you have a Company/Organization Something with some phone number ...47110 in your vCards and have some caller calling with ...471129 it will match this against the company phone number, if no contact for ...471129 is present.
 This might only be useful in countries with non fixed number lengths.
-The resulting text is set to the Asterisk variable CALLERID_VCARD.
+The resulting text is set to the Asterisk variables:
+ 
+ - CALLERID_VCARD - Full text for ex.: Jon Smith [W] (Somecompany)
+ - CALLERID_VCARD_ORG - Somecompany
+ - CALLERID_VCARD_FULLNAME - Jon Smith
 
 ## Dependencies
 
@@ -13,9 +17,10 @@ The resulting text is set to the Asterisk variable CALLERID_VCARD.
  
  Python Modules:
  
- - Configobj
- - vobject
+ - configobj
  - phonenumbers
+ - pyst
+ - vobject
  
 ## Installation
 
@@ -33,7 +38,7 @@ Afterwards you can start the FastAGI Prozess using:
 /usr/bin/astvcardcallerid
 ```
 
-It will listen on localhost ip 127.0.0.1:4573 for incoming TCP FastAGI connections.
+It will listen on localhost ip 127.0.0.1:4573 for incoming TCP FastAGI connections. Bind options and vCard directory can be changed by using command line parameters or configfile (see below).
 
 In Asterisk you can define a macro in the following way and set for example the CALLERID(name) variable:
 
@@ -41,7 +46,7 @@ In Asterisk you can define a macro in the following way and set for example the 
 [macro-vcard-callerid]
 exten => s,1,Noop(Received caller ID request for callerid ${CALLERID(all)})
 same => n,AGI(agi://127.0.0.1:4573)
-same => n,Noop(Caller ID lookup resulted in ${CALLERID_VCARD})
+same => n,Noop(Caller ID lookup resulted in: ${CALLERID_VCARD} Org: ${CALLERID_VCARD_ORG} Name: ${CALLERID_VCARD_FULLNAME})
 same => n,Set(CALLERID(name)=${CALLERID_VCARD})
 ```
 
@@ -68,7 +73,7 @@ A RPM spec file is provided and tested on RHEL 7 / CentOS 7.
 
 ## Configuration
 
-Behaviour can be changed using a configfile in /etc/astvcardcallerid.conf. A example file is given below including the default values:
+Behaviour can be changed using a configfile in /etc/astvcardcallerid.conf and limited to bind ip/port and directory using commandline parameters. Commandline parameters will overwrite configfile options.  A example file is given below including the default values:
 
 ```
 [general]
