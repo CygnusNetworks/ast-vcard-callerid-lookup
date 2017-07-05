@@ -1,9 +1,12 @@
 # coding=utf-8
+import logging
 import os
 import phonenumbers
 import re
 import vobject
 
+
+log = logging.getLogger("astvcardcallerid.vcard_parser")
 
 def read_cards(directory):
 	cards = []
@@ -12,7 +15,7 @@ def read_cards(directory):
 	for filename in files:
 		if os.path.isfile(os.path.join(directory, filename)) and filename.endswith(".vcf"):
 			with open(os.path.join(directory, filename), 'r') as f:
-				# print("Parsing vcard filename %s" % filename)
+				log.debug("Parsing vcard filename %s" % filename)
 				data = f.readlines()
 			for line in data:
 				if re.match(r"^BEGIN:VCARD", line):
@@ -41,15 +44,16 @@ def parse_cards(cards, origin="DE"):
 				# Remove everything non digit or +
 				num_pre = re.sub(r'[^0-9+]', '', num_pre)
 				try:
-					if num_pre.startswith("+"):
-						num = phonenumbers.parse(num_pre.decode('utf-8'))
+					if num_pre is not None and len(num_pre) > 3:
+						if num_pre.startswith("+"):
+							num = phonenumbers.parse(num_pre.decode('utf-8'))
+						else:
+							num = phonenumbers.parse(num_pre.decode('utf-8'), origin)
 					else:
-						num = phonenumbers.parse(num_pre.decode('utf-8'), origin)
+						continue
 				except UnicodeDecodeError:
 					pass
-
-				if num is not None and phonenumbers.is_valid_number(num):
-					# print(fn, t, phonenumbers.format_number(num, phonenumbers.PhoneNumberFormat.E164))
+				if num is not None and t is not None and phonenumbers.is_valid_number(num):
 					e164 = phonenumbers.format_number(num, phonenumbers.PhoneNumberFormat.E164)
 					if e164 not in numbers:
 						numbers[e164] = dict(fn=fn, card=card)
