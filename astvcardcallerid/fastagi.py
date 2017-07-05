@@ -62,7 +62,7 @@ class ASTVCardCallerID(SocketServer.StreamRequestHandler, SocketServer.Threading
 			if e164 in numbers:
 				if "org" in self.server.contact_data[e164]:
 					agi.set_variable("CALLERID_VCARD_ORG", self.server.contact_data[e164]["org"])
-				if "fn" in self.server.contact_data[e164]
+				if "fn" in self.server.contact_data[e164]:
 					agi.set_variable("CALLERID_VCARD_FULLNAME", self.server.contact_data[e164]["fn"])
 		except Exception as e:
 			print(e)
