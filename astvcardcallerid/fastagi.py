@@ -34,27 +34,27 @@ class ASTVCardCallerID(SocketServer.StreamRequestHandler, SocketServer.Threading
 		return text
 
 	def handle(self):
-		log.debug("Received FastAGI request for client %s:%s" % self.client_address)
+		log.debug("Received FastAGI request for client %s:%s", self.client_address[0], self.client_address[1])
 		try:
 			devnull = open(os.devnull, 'w')
 			agi = asterisk.agi.AGI(self.rfile, self.wfile, devnull)
 			num = agi.get_variable('CALLERID(num)')
-			log.debug("FastAGI request for client %s:%s for number %s" % (self.client_address[0], self.client_address[1], num))
+			log.debug("FastAGI request for client %s:%s for number %s", self.client_address[0], self.client_address[1], num)
 			parsed_num = phonenumbers.parse(num, self.server.config["general"]["origin"])
 			e164 = phonenumbers.format_number(parsed_num, phonenumbers.PhoneNumberFormat.E164)
-			log.debug("FastAGI request for client %s:%s for E164 number %s" % (self.client_address[0], self.client_address[1], e164))
+			log.debug("FastAGI request for client %s:%s for E164 number %s", self.client_address[0], self.client_address[1], e164)
 			numbers = self.server.contact_data.keys()
 			text = None
 			if e164 in numbers:
 				text = self.make_text(self.server.contact_data[e164])
-				log.debug("FastAGI request for client %s:%s for E164 number %s results in Caller ID %s" % (self.client_address[0], self.client_address[1], e164, text))
+				log.debug("FastAGI request for client %s:%s for E164 number %s results in Caller ID %s", self.client_address[0], self.client_address[1], e164, text)
 			else:
 				for number in numbers:
 					if number.endswith("0") and "org" in self.server.contact_data[number]:
 						if e164[:len(number) - 2] == number[:-1]:
 							text = self.make_text(self.server.contact_data[number])
 							break
-				log.debug("FastAGI request for client %s:%s for E164 number %s results in Organiztion Caller ID %s" % (self.client_address[0], self.client_address[1], e164, text))
+				log.debug("FastAGI request for client %s:%s for E164 number %s results in Organiztion Caller ID %s", self.client_address[0], self.client_address[1], e164, text)
 
 			if text is not None:
 				agi.set_variable("CALLERID_VCARD", text)
@@ -100,16 +100,16 @@ def main():
 	if num_numbers == 0:
 		log.error("No numbers found. Not serving any callerids")
 		sys.exit(0)
-	log.debug("Finished parsing contact data - Found %i distinct numbers" % num_numbers)
+	log.debug("Finished parsing contact data - Found %i distinct numbers", num_numbers)
 	server.config = c
 	try:
-		log.debug("Server FastAGI on %s:%s" % (ip, port))
+		log.debug("Server FastAGI on %s:%s", ip, port)
 		server.serve_forever()
 	except KeyboardInterrupt as e:
 		log.info("Shutdown on ctrl-c")
 		sys.exit(0)
 	except Exception as e:
-		log.exception("Unknown Exception %s occured" % e)
+		log.exception("Unknown Exception %s occured", e)
 		sys.exit(1)
 
 if __name__ == "__main__":
